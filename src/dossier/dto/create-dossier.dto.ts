@@ -12,7 +12,4 @@ export class CreateDossierDto {
 
     @IsObject()
     mobilier_resident: any;
-
-    @IsObject()
-    paiements: any;
 }

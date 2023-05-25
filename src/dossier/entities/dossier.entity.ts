@@ -17,8 +17,6 @@ mobilier_cite: any;
 @Prop({type: Object, required: true})
 mobilier_resident: any;
 
-@Prop({type: Object, required: true})
-paiements: any;
 }
 
 export const DossierSchema = SchemaFactory.createForClass(Dossier);
