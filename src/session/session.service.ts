@@ -34,23 +34,23 @@ export class SessionService extends AbstractModel<Session,CreateSessionDto,Updat
         headers: { 'Accept': 'application/json', Authorization: `Bearer ${this.config.get('TOKEN_ETUDIANT_API')}` },
       })).then(res => res.data).catch(console.error);
   
-      //console.log(this.getPourcentage('NIVEAU 4','642ea105255b7c63193f716d',niveaus,session.master1));
+
       const r = await this.pavService.getNbChambreBySession(id);
       const totalLits = r.reduce((acc,cur) => acc + cur.nb_lit,0);
       const totalLitsPavillonGarcon = r.filter(p => p.type === "HOMME").reduce((acc,cur) => acc + cur.nb_lit,0);
       const totalLitsPavillonFille = r.filter(p => p.type === "FEMME").reduce((acc,cur) => acc + cur.nb_lit,0);
-      const pourcentageLitsPavillonGarcon = (totalLitsPavillonGarcon /totalLits) * 100;
-      const pourcentageLitsPavillonFille = (totalLitsPavillonFille /totalLits) * 100;
-      const absoluPedagogique = (totalLits * session.pedagogique) / 100;
+      const pourcentageLitsPavillonGarcon = Math.round((totalLitsPavillonGarcon /totalLits) * 100);
+      const pourcentageLitsPavillonFille = Math.round((totalLitsPavillonFille /totalLits) * 100);
+      const absoluPedagogique = Math.round((totalLits * session.pedagogique) / 100);
       const absoluSociale = totalLits  - absoluPedagogique;
-      const absoluPedGarcon = (absoluPedagogique * pourcentageLitsPavillonGarcon) / 100;
-      const absoluPedFille = (absoluPedagogique * pourcentageLitsPavillonFille) / 100;
-      const absoluSocGarcon = (absoluSociale * pourcentageLitsPavillonGarcon) / 100;
-      const absoluSocFille = (absoluSociale * pourcentageLitsPavillonFille) / 100;
+      const absoluPedGarcon = Math.round((absoluPedagogique * pourcentageLitsPavillonGarcon) / 100);
+      const absoluPedFille = Math.round((absoluPedagogique * pourcentageLitsPavillonFille) / 100);
+      const absoluSocGarcon = Math.round((absoluSociale * pourcentageLitsPavillonGarcon) / 100);
+      const absoluSocFille = Math.round((absoluSociale * pourcentageLitsPavillonFille) / 100);
       const effectifTotal = departements.reduce((acc,cur) => acc + cur.total,0)
       const effectifDepartement = departements.map(d => {
-       const percent = (d.total / effectifTotal) * 100;
-       const nb_lit = (percent * absoluPedagogique) / 100;
+       const percent = Math.round((d.total / effectifTotal) * 100);
+       const nb_lit = Math.round((percent * absoluPedagogique) / 100);
        return {...d, percent,nb_lit}
       });
       const effectifFormation = formations.map(f => {
@@ -58,9 +58,9 @@ export class SessionService extends AbstractModel<Session,CreateSessionDto,Updat
         const pcs = this.getPedagogiquePercent(niv,session)
         const nbld = this.getNbLitDepartement(f.formation.departement,effectifDepartement);
         const pf = this.getPourcentage(niv,f.formation.departement,niveaus,pcs);
-        const nb_lit = Math.floor((nbld * pf)/100);
-        const nb_lit_g = Math.floor((nb_lit * pourcentageLitsPavillonGarcon) / 100);
-        const nb_lit_f = Math.floor((nb_lit * pourcentageLitsPavillonFille) / 100);
+        const nb_lit = Math.round((nbld * pf)/100);
+        const nb_lit_g = Math.round((nb_lit * pourcentageLitsPavillonGarcon) / 100);
+        const nb_lit_f = Math.round((nb_lit * pourcentageLitsPavillonFille) / 100);
         return  {...f,percent: pf,nb_lit,nb_lit_f,nb_lit_g};
       });
       const calculs = {

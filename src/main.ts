@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './utils/http-filter';
 
 const logger = new Logger('Main');
 async function bootstrap() {
@@ -22,6 +23,7 @@ async function bootstrap() {
       disableErrorMessages: process.env.NODE_ENV == 'production',
     }),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
   const config = app.get(ConfigService);
 
   const port = parseInt(config.get('NEST_PORT'), 10) || process.env.PORT;
