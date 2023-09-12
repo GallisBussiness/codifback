@@ -2,20 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SelectionneService } from './selectionne.service';
 import { CreateSelectionneDto } from './dto/create-selectionne.dto';
 import { UpdateSelectionneDto } from './dto/update-selectionne.dto';
-import { lastValueFrom } from 'rxjs';
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
+import { InscriptionService } from 'src/inscription/inscription.service';
 
 @Controller('selectionne')
 export class SelectionneController {
-  constructor(private readonly selectionneService: SelectionneService, private httpService: HttpService,private config: ConfigService) {}
+  constructor(private readonly selectionneService: SelectionneService, private inscriptionService: InscriptionService) {}
 
   @Post()
   async create(@Body() createSelectionneDto: CreateSelectionneDto) {
     const s = await this.selectionneService.create(createSelectionneDto);
-    await lastValueFrom(this.httpService.patch(`${this.config.get('ETUDIANT_API_URL')}/inscription/${s.inscription._id}`, {is_codified: true},{
-      headers: { 'Accept': 'application/json', Authorization: `Bearer ${this.config.get('TOKEN_ETUDIANT_API')}` },
-    })).then(res => res.data).catch(console.error);
+    await this.inscriptionService.update(s.inscription._id,{is_codified: true});
+    // await lastValueFrom(this.httpService.patch(`${this.config.get('ETUDIANT_API_URL')}/inscription/${s.inscription._id}`, {is_codified: true},{
+    //   headers: { 'Accept': 'application/json', Authorization: `Bearer ${this.config.get('TOKEN_ETUDIANT_API')}` },
+    // })).then(res => res.data).catch(console.error);
     return s;
   }
 
@@ -35,6 +34,16 @@ export class SelectionneController {
     return this.selectionneService.findByTypeAndFormation(session, formation);
   }
 
+  @Get('bysession/:session')
+  findBySession(@Param('session') session: string) {
+    return this.selectionneService.findBySession(session);
+  }
+
+  @Get('sociale/bysession/:session')
+  findBySociale(@Param('session') session: string) {
+    return this.selectionneService.findBySociale(session);
+  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -49,9 +58,10 @@ export class SelectionneController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
    const s = await  this.selectionneService.remove(id);
-   await lastValueFrom(this.httpService.patch(`${this.config.get('ETUDIANT_API_URL')}/inscription/${s.inscription._id}`, {is_codified: false},{
-    headers: { 'Accept': 'application/json', Authorization: `Bearer ${this.config.get('TOKEN_ETUDIANT_API')}` },
-  })).then(res => res.data).catch(console.error);
+   await this.inscriptionService.update(s.inscription._id,{is_codified: false});
+  //  await lastValueFrom(this.httpService.patch(`${this.config.get('ETUDIANT_API_URL')}/inscription/${s.inscription._id}`, {is_codified: false},{
+  //   headers: { 'Accept': 'application/json', Authorization: `Bearer ${this.config.get('TOKEN_ETUDIANT_API')}` },
+  // })).then(res => res.data).catch(console.error);
    return s;
   }
 }

@@ -9,12 +9,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthMiddleware } from './auth/auth.middleware';
-import { SessionModule } from './session/session.module';
 import { ResidenceModule } from './residence/residence.module';
 import { PavillonModule } from './pavillon/pavillon.module';
 import { SelectionneModule } from './selectionne/selectionne.module';
-import { SocialeModule } from './sociale/sociale.module';
 import { DossierModule } from './dossier/dossier.module';
+import { SessionModule } from './session_codif/session.module';
+import { SessionEtudiantModule } from './session-etudiant/session-etudiant.module';
+import { PayementModule } from './payement/payement.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,8 +26,17 @@ import { DossierModule } from './dossier/dossier.module';
         uri: config.get('MONGODB_URL'),
         autoCreate: true,
       }),
+      connectionName: 'codif',
       inject: [ConfigService],
       
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get('MONGODB_URL_ETUDIANT'),
+        autoCreate: true,
+      }),
+      connectionName:'etudiant',
+      inject: [ConfigService],
     }),
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => {
@@ -42,8 +52,9 @@ import { DossierModule } from './dossier/dossier.module';
     ResidenceModule,
     PavillonModule,
     SelectionneModule,
-    SocialeModule,
     DossierModule,
+    SessionEtudiantModule,
+    PayementModule,
   ],
   controllers: [],
   providers: [],

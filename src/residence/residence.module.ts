@@ -9,7 +9,7 @@ import { Residence, ResidenceSchema } from './entities/residence.entity';
     const schema = ResidenceSchema;
     schema.plugin(require('mongoose-autopopulate'));
     return schema;
-}}])],
+}}],'codif')],
   controllers: [ResidenceController],
   providers: [ResidenceService],
   exports: [ResidenceService],

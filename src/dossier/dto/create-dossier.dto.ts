@@ -1,11 +1,12 @@
 import { IsMongoId, IsObject } from "class-validator";
 
 export class CreateDossierDto {
+
     @IsMongoId()
     session: string;
 
     @IsMongoId()
-    inscription: string;
+    selectionne: string;
 
     @IsObject()
     mobilier_cite: any;

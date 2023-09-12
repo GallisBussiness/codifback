@@ -8,7 +8,7 @@ import { Residence, ResidenceDocument } from './entities/residence.entity';
 
 @Injectable()
 export class ResidenceService extends AbstractModel<Residence,CreateResidenceDto,UpdateResidenceDto>{
-  constructor(@InjectModel(Residence.name) private residenceModel: Model<ResidenceDocument>) {
+  constructor(@InjectModel(Residence.name,'codif') private residenceModel: Model<ResidenceDocument>) {
     super(residenceModel);
   }
 

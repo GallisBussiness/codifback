@@ -2,14 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DossierService } from './dossier.service';
 import { CreateDossierDto } from './dto/create-dossier.dto';
 import { UpdateDossierDto } from './dto/update-dossier.dto';
+import { PayementService } from 'src/payement/payement.service';
 
 @Controller('dossier')
 export class DossierController {
-  constructor(private readonly dossierService: DossierService) {}
+  constructor(private readonly dossierService: DossierService, private payementService: PayementService) {}
 
   @Post()
-  create(@Body() createDossierDto: CreateDossierDto) {
-    return this.dossierService.create(createDossierDto);
+  async create(@Body() createDossierDto: CreateDossierDto) {
+    const d = await this.dossierService.create(createDossierDto);
+    await this.payementService.create({session: d.session, dossier: d._id});
+    return d;
   }
 
   @Get()
@@ -22,9 +25,9 @@ export class DossierController {
     return this.dossierService.findOne(id);
   }
 
-  @Get('byinscription/:ins')
-  findOneByInscription(@Param('ins') ins: string) {
-    return this.dossierService.findOneByInscription(ins);
+  @Get('byselectionne/:selectionne')
+  findOneByInscription(@Param('selectionne') selectionne: string) {
+    return this.dossierService.findOneBySelectionne(selectionne);
   }
 
   @Patch(':id')

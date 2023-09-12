@@ -9,7 +9,7 @@ import { ResidenceService } from 'src/residence/residence.service';
 
 @Injectable()
 export class PavillonService extends AbstractModel<Pavillon,CreatePavillonDto,UpdatePavillonDto> {
-  constructor(@InjectModel(Pavillon.name) private pavillonModel: Model<PavillonDocument>, private residenceService: ResidenceService) {
+  constructor(@InjectModel(Pavillon.name,'codif') private pavillonModel: Model<PavillonDocument>, private residenceService: ResidenceService) {
     super(pavillonModel);
   }
 

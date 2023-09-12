@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
-import { Session } from "src/session/entities/session.entity";
+import { Session } from "src/session_codif/entities/session.entity";
+import { TYPECODIF } from "../dto/create-selectionne.dto";
 
 export type SelectionneDocument = Selectionne & Document;
 
@@ -11,6 +12,9 @@ export class Selectionne {
 
     @Prop({type: Object, required: true})
     inscription: any;
+
+    @Prop({type: String,enum:TYPECODIF, default:TYPECODIF.PEDAGOGIQUE, required: true})
+    typeCodif: string;
 
     @Prop({type: String, required: true})
     formation: string;

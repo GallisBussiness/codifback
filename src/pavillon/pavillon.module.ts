@@ -6,7 +6,7 @@ import { Pavillon, PavillonSchema } from './entities/pavillon.entity';
 import { ResidenceModule } from 'src/residence/residence.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{name: Pavillon.name, schema: PavillonSchema}]), ResidenceModule],
+  imports: [MongooseModule.forFeature([{name: Pavillon.name, schema: PavillonSchema}],'codif'), ResidenceModule],
   controllers: [PavillonController],
   providers: [PavillonService],
   exports: [PavillonService],

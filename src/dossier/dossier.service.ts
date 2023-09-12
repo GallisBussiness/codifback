@@ -8,13 +8,13 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class DossierService extends AbstractModel<Dossier,CreateDossierDto,UpdateDossierDto>{
-  constructor(@InjectModel(Dossier.name) private dossierModel: Model<DossierDocument>) {
+  constructor(@InjectModel(Dossier.name,'codif') private dossierModel: Model<DossierDocument>) {
     super(dossierModel);
   }
 
-  async findOneByInscription(ins: string): Promise<Dossier> {
+  async findOneBySelectionne(selectionne: string): Promise<Dossier> {
    try {
-    return await this.dossierModel.findOne({inscription: ins});
+    return await this.dossierModel.findOne({selectionne});
    } catch (error) {
     throw new HttpException(error.message,500);
    }
