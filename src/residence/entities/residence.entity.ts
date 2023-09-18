@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { Session } from "src/session-etudiant/entities/session-etudiant.entity";
+import { Session } from "src/session_codif/entities/session.entity";
+
 
 export type ResidenceDocument = Residence & Document;
 

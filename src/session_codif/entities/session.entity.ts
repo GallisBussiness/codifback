@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
+import {Session as SessionEtudiant} from 'src/session-etudiant/entities/session-etudiant.entity'
 
 export type SessionDocument  = Session & Document;
 
@@ -50,7 +51,7 @@ export class Session {
     @Prop({type: Number, required: true, default:0})
     etranger: number;
 
-    @Prop({type:Types.ObjectId, ref: Session.name,required:true})
+    @Prop({type:Types.ObjectId, ref: SessionEtudiant.name,required:true})
     pedagogique_session: string;
 }
 
